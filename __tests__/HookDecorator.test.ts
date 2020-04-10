@@ -4,6 +4,7 @@ const consoleOutput: string[] = [];
 
 @Hook({
   beforeAction: () => consoleOutput.push('hello'),
+  afterAction: () => consoleOutput.push('!'),
 })
 class Logger {
   log(s: string): void {
@@ -15,6 +16,6 @@ describe('Hook', () => {
   it('should output hello world', () => {
     const logger = new Logger();
     logger.log('world');
-    expect(consoleOutput).toEqual(['hello', 'world']);
+    expect(consoleOutput).toEqual(['hello', 'world', '!']);
   });
 });

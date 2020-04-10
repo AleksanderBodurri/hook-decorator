@@ -94,6 +94,7 @@ const patchWithBeforeAndAfter = (
 ) => {
   const original = functionToPatchParent[keyToFunction];
   functionToPatchParent[keyToFunction] = function (): any {
+    before.call(this);
     const result = original.apply(this, arguments);
     after.call(this);
     return result;
