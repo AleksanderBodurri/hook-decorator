@@ -5,9 +5,15 @@ interface HookConfigOptions {
   patchAngular: boolean;
 }
 
+interface Hook {
+  callback: Callback;
+  only?: string[];
+  except?: string[];
+}
+
 export interface HookConfig {
-  beforeAction?: Callback;
-  afterAction?: Callback;
+  beforeAction?: Hook;
+  afterAction?: Hook;
   options?: HookConfigOptions;
 }
 
@@ -25,7 +31,7 @@ const angularLifeCycleInternalMappings: { [key: string]: string } = {
 export const Hook = (config: HookConfig): ClassDecorator => {
   const { beforeAction, afterAction } = config;
   return (constructor) => {
-    if (!beforeAction && !afterAction) {
+    if (!beforeAction?.callback && !afterAction?.callback) {
       return;
     }
     Object.getOwnPropertyNames(constructor.prototype)
@@ -69,34 +75,46 @@ const parseAndPatchAngular = (componentMetadata: any, lifecycle: string, config:
   parseAndPatch(componentMetadata, lifecycle, config);
 };
 
-const patchWithBefore = (functionToPatchParent: Function, keyToFunction: string, before: Callback) => {
+const patchWithBefore = (functionToPatchParent: Function, keyToFunction: string, before: Hook) => {
   const original = functionToPatchParent[keyToFunction];
   functionToPatchParent[keyToFunction] = function (): any {
-    before.call(this, this);
+    invokeHookCallback(before, this, keyToFunction);
     return original.apply(this, arguments);
   };
 };
 
-const patchWithAfter = (functionToPatchParent: Function, keyToFunction: string, after: Callback) => {
+const patchWithAfter = (functionToPatchParent: Function, keyToFunction: string, after: Hook) => {
   const original = functionToPatchParent[keyToFunction];
   functionToPatchParent[keyToFunction] = function (): any {
     const result = original.apply(this, arguments);
-    after.call(this, this);
+    invokeHookCallback(after, this, keyToFunction);
     return result;
   };
 };
 
-const patchWithBeforeAndAfter = (
-  functionToPatchParent: Function,
-  keyToFunction: string,
-  before: Callback,
-  after: Callback
-) => {
+const patchWithBeforeAndAfter = (functionToPatchParent: Function, keyToFunction: string, before: Hook, after: Hook) => {
   const original = functionToPatchParent[keyToFunction];
   functionToPatchParent[keyToFunction] = function (): any {
-    before.call(this, this);
+    invokeHookCallback(before, this, keyToFunction);
     const result = original.apply(this, arguments);
-    after.call(this, this);
+    invokeHookCallback(after, this, keyToFunction);
     return result;
   };
+};
+
+const invokeHookCallback = (hook: Hook, classInstance: any, functionName: string) => {
+  const { callback, only, except } = hook;
+
+  if (only || except) {
+    if (only?.length) {
+      const found = only.find((name) => name === functionName);
+      found && callback.call(classInstance, classInstance);
+    } else if (except?.length) {
+      const found = except.find((name) => name === functionName);
+      !found && callback.call(classInstance, classInstance);
+    }
+    return;
+  }
+
+  callback.call(classInstance, classInstance);
 };
