@@ -6,7 +6,7 @@ Inspired by rails action controller filters.
 
 This decorator can patch before/after actions into every function defined by a class.
 
-##Installation
+## Installation
 
 ```shell
 npm i hook-decorator --save
@@ -14,7 +14,8 @@ npm i hook-decorator --save
 
 ## Usage
 
-###Example
+
+### Example
 
 ```typescript
 import { Hook } from 'hook-decorator';
