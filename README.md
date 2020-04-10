@@ -1,4 +1,4 @@
-https://www.npmjs.com/package/hook-decorator
+[![npm version](https://badge.fury.io/js/hook-decorator.svg)](https://badge.fury.io/js/hook-decorator)
 
 # hook-decorator
 
