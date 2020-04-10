@@ -1,5 +1,5 @@
 type ClassDecorator = (constructor: any) => void;
-type Callback = () => any;
+type Callback = (classInstance?: any) => any;
 
 interface HookConfigOptions {
   patchAngular: boolean;
@@ -72,7 +72,7 @@ const parseAndPatchAngular = (componentMetadata: any, lifecycle: string, config:
 const patchWithBefore = (functionToPatchParent: Function, keyToFunction: string, before: Callback) => {
   const original = functionToPatchParent[keyToFunction];
   functionToPatchParent[keyToFunction] = function (): any {
-    before.call(this);
+    before.call(this, this);
     return original.apply(this, arguments);
   };
 };
@@ -81,7 +81,7 @@ const patchWithAfter = (functionToPatchParent: Function, keyToFunction: string, 
   const original = functionToPatchParent[keyToFunction];
   functionToPatchParent[keyToFunction] = function (): any {
     const result = original.apply(this, arguments);
-    after.call(this);
+    after.call(this, this);
     return result;
   };
 };
@@ -94,9 +94,9 @@ const patchWithBeforeAndAfter = (
 ) => {
   const original = functionToPatchParent[keyToFunction];
   functionToPatchParent[keyToFunction] = function (): any {
-    before.call(this);
+    before.call(this, this);
     const result = original.apply(this, arguments);
-    after.call(this);
+    after.call(this, this);
     return result;
   };
 };
