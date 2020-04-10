@@ -17,11 +17,16 @@ npm i hook-decorator --save
 ###Example
 
 ```typescript
+import { Hook } from 'hook-decorator';
+
 @Hook({
-  beforeAction: () => console.log('hello'),
-  afterAction: () => console.log('!')
+  beforeAction: (classInstance: Logger) => console.log(classInstance.pre),
+  afterAction: (classInstance: Logger) => console.log(classInstance.post),
 })
 class Logger {
+  pre = 'hello';
+  post = '!';
+
   log(): void {
     console.log('world');
   }
@@ -43,7 +48,7 @@ export interface HookConfig {
   options?: HookConfigOptions;
 }
 
-type Callback = () => any;
+type Callback = (classInstance?: any) => any;
 
 interface HookConfigOptions {
   patchAngular: boolean;
