@@ -5,16 +5,29 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --config jestconfig.json",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json",
-    "build": "tsc"
+    "build": "tsc",
+    "prepare": "npm run build",
+    "preversion": "npm run lint",
+    "version": "npm run format && git add -A src",
+    "postversion": "git push && git push --tags",
+    "pretty-quick": "pretty-quick"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/AleksanderBodurri/hook-decorator.git"
   },
-  "keywords": ["hook", "decorator"],
+  "keywords": [
+    "hook",
+    "decorator"
+  ],
   "author": "AleksanderBodurri",
   "license": "MIT",
   "bugs": {
@@ -22,9 +35,17 @@
   },
   "homepage": "https://github.com/AleksanderBodurri/hook-decorator#readme",
   "devDependencies": {
+    "@types/jest": "^25.2.1",
+    "husky": "^4.2.5",
+    "jest": "^25.3.0",
     "prettier": "^2.0.4",
+    "pretty-quick": "^2.0.1",
+    "ts-jest": "^25.3.1",
     "tslint": "^6.1.1",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.8.3"
-  }
+  },
+  "files": [
+    "lib/**/*"
+  ]
 }
