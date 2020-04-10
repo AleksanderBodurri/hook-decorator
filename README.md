@@ -33,10 +33,10 @@ class Logger {
 }
 
 const logger = new Logger();
-logger.log()
-## hello
-## world
-## !
+logger.log();
+// hello
+// world
+// !
 ```
 
 ### Configuration
