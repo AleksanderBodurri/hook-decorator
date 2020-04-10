@@ -4,7 +4,7 @@
 
 Inspired by rails action controller filters.
 
-This decorator can patch before/after actions into every function defined by a class.
+This decorator patches before/after hooks into every method (referred to in API as actions) defined by a class.
 
 ##Installation
 
@@ -20,8 +20,12 @@ npm i hook-decorator --save
 import { Hook } from 'hook-decorator';
 
 @Hook({
-  beforeAction: (classInstance: Logger) => console.log(classInstance.pre),
-  afterAction: (classInstance: Logger) => console.log(classInstance.post),
+  beforeAction: {
+    callback: (classInstance: Logger) => console.log(classInstance.pre),
+  },
+  afterAction: {
+    callback: (classInstance: Logger) => console.log(classInstance.post),
+  },
 })
 class Logger {
   pre = 'hello';
@@ -43,9 +47,15 @@ logger.log();
 
 ```ts
 export interface HookConfig {
-  beforeAction?: Callback;
-  afterAction?: Callback;
+  beforeAction?: Hook;
+  afterAction?: Hook;
   options?: HookConfigOptions;
+}
+
+interface Hook {
+  callback: Callback;
+  only?: string[];
+  except?: string[];
 }
 
 type Callback = (classInstance?: any) => any;
