@@ -1,0 +1,30 @@
+{
+  "name": "hook-decorator",
+  "version": "1.0.0",
+  "description": "A hook decorator for es6 classes",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "lint": "tslint -p tsconfig.json",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AleksanderBodurri/hook-decorator.git"
+  },
+  "keywords": ["hook", "decorator"],
+  "author": "AleksanderBodurri",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AleksanderBodurri/hook-decorator/issues"
+  },
+  "homepage": "https://github.com/AleksanderBodurri/hook-decorator#readme",
+  "devDependencies": {
+    "prettier": "^2.0.4",
+    "tslint": "^6.1.1",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.8.3"
+  }
+}
