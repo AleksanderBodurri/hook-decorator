@@ -68,9 +68,7 @@ interface HookConfigOptions {
 
 #### Angular lifecycles
 
-Angular invokes lifecycle methods via internal data structures associated with the component. Because of this, overriding the lifecycle methods inside the class prototype does not change run time behaviour.
-
-Include the `options: { patchAngular: true }` in your config to patch these internal methods.
+Angular lifecycle methods are called differently from other methods. Hook decorator offers experimental support for these methods via the `patchAngular` option in `HookConfigOptions`.
 
 ## License
 
